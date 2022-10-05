@@ -7,7 +7,8 @@
 <link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
 </head>
 <body>
-	<h1>Books</h1>
+	<h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
+	<p>Books</p>
     <table class="table table-striped">
 		<tr>
 		    <th>Author</th>
@@ -15,6 +16,7 @@
 		    <th>ISBN</th>
 		    <th>Year</th>
 		    <th>Category</th>
+		    <th sec:authorize="hasAuthority('ADMIN')"> </th>
 		</tr>  
     	<tr th:each = "book : ${books}">
     		<td th:text="${book.author}"></td>
@@ -22,10 +24,13 @@
     		<td th:text="${book.isbn}"></td>
     		<td th:text="${book.reYear}"></td>
     		<td th:text="${book.category.name}"></td>
-    		<td><a th:href = "@{/delete/{id}(id = ${book.id})}" class="btn btn-danger">Delete</a></td>
+    		<td sec:authorize="hasAuthority('ADMIN')"><a th:href = "@{/delete/{id}(id = ${book.id})}" class="btn btn-danger">Delete</a></td>
     		<td><a th:href="@{/editbook/{id}(id=${book.id})}">Edit</a></td>
 		</tr>
 	</table>
 	<a href = "/addbook" class="btn btn-success">Add Book</a>
+	<form th:action="@{/logout}" method="post" name="_csrf" value="d63f746f-c5f6-4cc6-99c0-9220ff784b23">
+ 	<input type="submit" value="Sign Out"/>
+</form>
 </body>
 </html>
